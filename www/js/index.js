@@ -266,15 +266,12 @@ function initialize()
 
   bluetoothle.initialize(initializeSuccess, initializeError, paramsObj);
 
-
-
   return false;
 }
 
 function initializeSuccess(obj)
 {
   alert("Initialize Success : " + JSON.stringify(obj));
-  alert('Initialized');
 
   if (obj.status == "enabled")
   {
@@ -304,8 +301,6 @@ function enableSuccess(obj)
 {
   alert("Enable Success : " + JSON.stringify(obj));
 
-  alert('Enabled');
-
   if (obj.status == "enabled")
   {
     alert("Enabled");
@@ -333,7 +328,7 @@ function disable()
 function disableSuccess(obj)
 {
   alert("Disable Success : " + JSON.stringify(obj));
-  alert('Disabled');
+
   if (obj.status == "disabled")
   {
     alert("Disabled");
@@ -365,7 +360,7 @@ function startScan()
 function startScanSuccess(obj)
 {
   alert("Start Scan Success : " + JSON.stringify(obj));
-  alert('result : ' + obj);
+
   if (obj.status == "scanResult")
   {
     alert("Scan Result");
@@ -399,7 +394,7 @@ function stopScan()
 function stopScanSuccess(obj)
 {
   alert("Stop Scan Success : " + JSON.stringify(obj));
-  alert('Stop scan');
+
   if (obj.status == "scanStopped")
   {
     alert("Scan Stopped");
@@ -430,7 +425,7 @@ function retrieveConnected()
 function retrieveConnectedSuccess(obj)
 {
   alert("Retrieve Connected Success : " + JSON.stringify(obj));
-  alert('Connected');
+
   for (var i = 0; i < obj.length; i++)
   {
     addDevice(obj[i]);
@@ -525,7 +520,7 @@ function connect(address)
 function connectSuccess(obj)
 {
   alert("Connect Success : " + JSON.stringify(obj));
-  alert('Connected');
+
   if (obj.status == "connected")
   {
     alert("Connected");
@@ -559,7 +554,7 @@ function reconnect(address)
 function reconnectSuccess(obj)
 {
   alert("Reconnect Success : " + JSON.stringify(obj));
-  alert('Reconnected');
+
   if (obj.status == "connected")
   {
     alert("Connected");
@@ -593,7 +588,7 @@ function disconnect(address)
 function disconnectSuccess(obj)
 {
   alert("Disconnect Success : " + JSON.stringify(obj));
-  alert('Disconnected');
+
   if (obj.status == "disconnected")
   {
     alert("Disconnected");
@@ -657,7 +652,7 @@ function discover(address)
 function discoverSuccess(obj)
 {
   alert("Discover Success : " + JSON.stringify(obj));
-  alert('Discovered');
+
   if (obj.status == "discovered")
   {
     alert("Discovered");
@@ -716,7 +711,7 @@ function services(address)
 function servicesSuccess(obj)
 {
   alert("Services Success : " + JSON.stringify(obj));
-  alert('Services : ' + obj);
+
   if (obj.status == "services")
   {
     alert("Services");
@@ -910,8 +905,8 @@ function readSuccess(obj)
 
   if (obj.status == "read")
   {
-    var bytes = bluetoothle.encodedStringToBytes(obj.value);
-    alert("Read : " + bytes[0]);
+    /*var bytes = bluetoothle.encodedStringToBytes(obj.value);
+    alert("Read : " + bytes[0]);*/
 
     alert("Read");
   }
@@ -939,11 +934,13 @@ function subscribe(address, serviceUuid, characteristicUuid)
 
 function subscribeSuccess(obj)
 {
-  alert("Subscribe Success : " + JSON.stringify(obj));
+  var myobj = JSON.stringify(obj);
+  var val = bluetoothle.encodedStringToBytes(obj.value);
+  display(val[0]);
 
   if (obj.status == "subscribedResult")
   {
-    alert("Subscribed Result");
+    console.log("Subscribed Result");
   }
   else if (obj.status == "subscribed")
   {
@@ -1179,4 +1176,9 @@ String.prototype.format = function()
   {
     return typeof args[number] != 'undefined' ? args[number] : match;
   });
+}
+
+function display(val) {
+  var element = document.getElementById("text");
+  element.innerHTML = val;
 };

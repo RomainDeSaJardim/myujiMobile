@@ -2,6 +2,7 @@ var bluetoothle;
 
 var jqmReady = $.Deferred();
 var pgReady = $.Deferred();
+var newSongLoaded = false;
 
 var app =
 {
@@ -24,7 +25,35 @@ var app =
 };
 
 $(document).ready(function() {
+  DZ.init({
+    appId  : '152581',
+    channelUrl : 'channel.html',
+    player : {
+      container: 'player',
+      width : 600,
+      height : 300,
+      format : 'vertical',
+      onload : getSong
+    }
+  });
+
+  DZ.Event.subscribe('player_position', function(evt_properties){
+    if(evt_properties[0] > evt_properties[1]/2 && !newSongLoaded){
+      newSongLoaded = true;
+      getSong();
+    }
+  });
+
+  DZ.Event.subscribe('current_track', function(track){
+    newSongLoaded = false;
+  });
+
   $('#get-music').click(function(event) {
+    getSong();
+  });
+});
+
+function getSong(){
     // Get hearthbeat
     $( ".player-holder" ).empty();
 
@@ -32,14 +61,10 @@ $(document).ready(function() {
 
     // Send http request
     $.get( "http://localhost:3000/songs/"+hearthbeat, function(data) {
-      console.log(data);
-      var iframe = '<iframe scrolling="no" frameborder="0" allowTransparency="true" src="http://www.deezer.com/plugins/player?autoplay=true&playlist=true&width=700&height=240&cover=true&type=tracks&id='+data+'" width="700" height="240"></iframe>';
-      $('.player-holder').append(iframe);
+      DZ.player.addToQueue([data.id]);
     }, "json");
-  });
-});
 
-
+};
 
 
 

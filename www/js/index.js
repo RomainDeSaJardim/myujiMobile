@@ -23,6 +23,32 @@ var app =
   }
 };
 
+$(document).ready(function() {
+  $('#get-music').click(function(event) {
+    // Get hearthbeat
+    $( ".player-holder" ).empty();
+
+    var hearthbeat = 75;
+
+    // Send http request
+    $.get( "http://localhost:3000/songs/"+hearthbeat, function(data) {
+      console.log(data);
+      var iframe = '<iframe scrolling="no" frameborder="0" allowTransparency="true" src="http://www.deezer.com/plugins/player?autoplay=true&playlist=true&width=700&height=240&cover=true&type=tracks&id='+data+'" width="700" height="240"></iframe>';
+      $('.player-holder').append(iframe);
+    }, "json");
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
 $(document).on("pagecreate", function()
 {
   //Resolve jQuery Mobile
@@ -38,6 +64,7 @@ $.when(jqmReady, pgReady).then(function()
     app.callback();
   }
 });
+
 
 function onDeviceReady()
 {
